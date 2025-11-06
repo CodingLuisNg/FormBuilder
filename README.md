@@ -54,7 +54,7 @@ FormBuilder/
    ```
 
 4. **Set up MySQL tables:**
-   no need as there are function to ensure tables exists, if not, they will be automatically created
+   No need, as there are functions to ensure tables exist, and they will be automatically created
 
 ### Running
 - **Start the backend:**
