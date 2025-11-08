@@ -5,11 +5,26 @@ import { FormSchema } from "./formTypes";
 import SavedForms from "./SavedForms";
 import ResponsesPage from "./ResponsesPage";
 
+// Notification component
+function Notification({ message, onClose }: { message: string, onClose: () => void }) {
+  React.useEffect(() => {
+    const timer = setTimeout(onClose, 2000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+  return (
+    <div style={{
+      position: "fixed", top: 24, right: 24, zIndex: 1000,
+      background: "#222", color: "#fff", padding: "16px 32px", borderRadius: 8, boxShadow: "0 2px 12px #0003", fontSize: 16
+    }}>{message}</div>
+  );
+}
+
 export default function App() {
     const [form, setForm] = useState<FormSchema | null>(null);
     const [mode, setMode] = useState<"builder" | "preview" | "saved" | "responses">("saved");
     const [editForm, setEditForm] = useState<FormSchema | null>(null);
     const [showWarning, setShowWarning] = useState(false);
+    const [notification, setNotification] = useState<string | null>(null);
 
     const navigateTo = (newMode: typeof mode, formToEdit: FormSchema | null = null) => {
         setEditForm(formToEdit);
@@ -26,10 +41,13 @@ export default function App() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
             });
-            if (!res.ok) throw new Error("Failed to save form");
-            // Do not navigate to main page after saving
+            if (!res.ok) { setNotification("Failed to save form"); return; }
+            const savedForm = await res.json();
+            setForm(savedForm);
+            setEditForm(savedForm);
+            setNotification("Form saved successfully!");
         } catch (err) {
-            alert(`Error saving form: ${(err as Error).message}`);
+            setNotification(`Error saving form: ${(err as Error).message}`);
         }
     };
 
@@ -40,6 +58,7 @@ export default function App() {
 
     return (
         <div style={{ fontFamily: "sans-serif", background: "#f0f1f6", minHeight: "100vh", paddingTop: 32 }}>
+            {notification && <Notification message={notification} onClose={() => setNotification(null)} />}
             {mode === "saved" && <SavedForms onEdit={(form) => navigateTo("builder", form)} onCreateNew={() => navigateTo("builder")} />}
             {mode === "builder" && (
                 <div style={{ maxWidth: 700, margin: "40px auto", padding: 24 }}>
