@@ -141,100 +141,102 @@ export function FormPreview({ form, onReturn }: { form: FormSchema, onReturn: ()
     }
 
     return (
-        <form onSubmit={handleSubmit} style={{ maxWidth: 700, margin: "40px auto", background: "#f8f8fa", borderRadius: 16, boxShadow: "0 4px 24px #0001", padding: 40 }}>
-            <h2 style={{ marginBottom: 32 }}>{form.title}</h2>
-            {errors.length > 0 && <div style={{ color: "red", marginBottom: 24 }}>{errors.map((err, i) => <div key={i}>{err}</div>)}</div>}
-            {form.fields.map(field => (
-                visibleFieldIds.includes(field.id) && (
-                    <div key={field.id} style={{ marginBottom: 36 }}>
-                        <label style={{ display: "block", fontWeight: 600, fontSize: 18, marginBottom: 12 }}>{field.label}</label>
-                        {field.type === "text" && (
-                            <input style={{ width: "100%", fontSize: 16, padding: "10px 14px", borderRadius: 8, border: "1px solid #ddd", marginBottom: 8 }} value={values[field.id] || ""} onChange={e => handleChange(field.id, e.target.value)} />
-                        )}
-                        {field.type === "dropdown" && (
-                            <select style={{ width: "100%", fontSize: 16, padding: "10px 14px", borderRadius: 8, border: "1px solid #ddd", marginBottom: 8 }} value={values[field.id] || ""} onChange={e => handleChange(field.id, e.target.value)}>
-                                <option value="">Select...</option>
-                                {field.options.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
-                            </select>
-                        )}
-                        {field.type === "table" && (
-                            <div style={{ marginTop: 12 }}>
-                                <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 12 }}>
-                                    <thead>
-                                        <tr>
-                                            <th style={{ width: 120 }}></th>
-                                            {field.columns.map(col => (
-                                                <th key={col.id} style={{ padding: "12px 10px", fontWeight: 600, fontSize: 15 }}>{col.label}</th>
+        <div className="responsive-container">
+            <form onSubmit={handleSubmit} style={{ maxWidth: 700, margin: "40px auto", background: "#f8f8fa", borderRadius: 16, boxShadow: "0 4px 24px #0001", padding: 40 }}>
+                <h2 style={{ marginBottom: 32 }}>{form.title}</h2>
+                {errors.length > 0 && <div style={{ color: "red", marginBottom: 24 }}>{errors.map((err, i) => <div key={i}>{err}</div>)}</div>}
+                {form.fields.map(field => (
+                    visibleFieldIds.includes(field.id) && (
+                        <div key={field.id} style={{ marginBottom: 36 }}>
+                            <label style={{ display: "block", fontWeight: 600, fontSize: 18, marginBottom: 12 }}>{field.label}</label>
+                            {field.type === "text" && (
+                                <input style={{ width: "100%", fontSize: 16, padding: "10px 14px", borderRadius: 8, border: "1px solid #ddd", marginBottom: 8 }} value={values[field.id] || ""} onChange={e => handleChange(field.id, e.target.value)} />
+                            )}
+                            {field.type === "dropdown" && (
+                                <select style={{ width: "100%", fontSize: 16, padding: "10px 14px", borderRadius: 8, border: "1px solid #ddd", marginBottom: 8 }} value={values[field.id] || ""} onChange={e => handleChange(field.id, e.target.value)}>
+                                    <option value="">Select...</option>
+                                    {field.options.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
+                                </select>
+                            )}
+                            {field.type === "table" && (
+                                <div className="responsive-table-wrapper" style={{ marginTop: 12 }}>
+                                    <table className="responsive-table" style={{ width: "100%", borderCollapse: "collapse", marginBottom: 12 }}>
+                                        <thead>
+                                            <tr>
+                                                <th style={{ width: 120 }}></th>
+                                                {field.columns.map(col => (
+                                                    <th key={col.id} style={{ padding: "12px 10px", fontWeight: 600, fontSize: 15 }}>{col.label}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {field.mode === "static" && (field.rowLabels || []).map((rowLabel, rowIdx) => (
+                                                <tr key={rowIdx}>
+                                                    <td style={{ fontWeight: 600, padding: "12px 10px", fontSize: 15 }}>{rowLabel}</td>
+                                                    {field.columns.map(col => (
+                                                        <td key={col.id} style={{ padding: "12px 10px" }}>
+                                                            {col.type === "text" ? (
+                                                                <input style={{ width: "100%", fontSize: 15, padding: "8px 10px", borderRadius: 6, border: "1px solid #ddd" }} value={values[field.id]?.[rowIdx]?.[col.id] || ""} onChange={e => {
+                                                                    const table = values[field.id] || Array(field.rowLabels?.length).fill({});
+                                                                    table[rowIdx] = { ...table[rowIdx], [col.id]: e.target.value };
+                                                                    handleChange(field.id, table);
+                                                                }} />
+                                                            ) : (
+                                                                <select style={{ width: "100%", fontSize: 15, padding: "8px 10px", borderRadius: 6, border: "1px solid #ddd" }} value={values[field.id]?.[rowIdx]?.[col.id] || ""} onChange={e => {
+                                                                    const table = values[field.id] || Array(field.rowLabels?.length).fill({});
+                                                                    table[rowIdx] = { ...table[rowIdx], [col.id]: e.target.value };
+                                                                    handleChange(field.id, table);
+                                                                }}>
+                                                                    <option value="">Select...</option>
+                                                                    {col.options?.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
+                                                                </select>
+                                                            )}
+                                                        </td>
+                                                    ))}
+                                                </tr>
                                             ))}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {field.mode === "static" && (field.rowLabels || []).map((rowLabel, rowIdx) => (
-                                            <tr key={rowIdx}>
-                                                <td style={{ fontWeight: 600, padding: "12px 10px", fontSize: 15 }}>{rowLabel}</td>
-                                                {field.columns.map(col => (
-                                                    <td key={col.id} style={{ padding: "12px 10px" }}>
-                                                        {col.type === "text" ? (
-                                                            <input style={{ width: "100%", fontSize: 15, padding: "8px 10px", borderRadius: 6, border: "1px solid #ddd" }} value={values[field.id]?.[rowIdx]?.[col.id] || ""} onChange={e => {
-                                                                const table = values[field.id] || Array(field.rowLabels?.length).fill({});
-                                                                table[rowIdx] = { ...table[rowIdx], [col.id]: e.target.value };
-                                                                handleChange(field.id, table);
-                                                            }} />
-                                                        ) : (
-                                                            <select style={{ width: "100%", fontSize: 15, padding: "8px 10px", borderRadius: 6, border: "1px solid #ddd" }} value={values[field.id]?.[rowIdx]?.[col.id] || ""} onChange={e => {
-                                                                const table = values[field.id] || Array(field.rowLabels?.length).fill({});
-                                                                table[rowIdx] = { ...table[rowIdx], [col.id]: e.target.value };
-                                                                handleChange(field.id, table);
-                                                            }}>
-                                                                <option value="">Select...</option>
-                                                                {col.options?.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
-                                                            </select>
-                                                        )}
-                                                    </td>
-                                                ))}
-                                            </tr>
-                                        ))}
-                                        {field.mode === "dynamic" && ((Array.isArray(values[field.id]) ? values[field.id] : [])).map((row: any, rowIdx: number) => (
-                                            <tr key={rowIdx}>
-                                                <td style={{ fontWeight: 600, padding: "12px 10px", fontSize: 15 }}>{rowIdx + 1}</td>
-                                                {field.columns.map(col => (
-                                                    <td key={col.id} style={{ padding: "12px 10px" }}>
-                                                        {col.type === "text" ? (
-                                                            <input style={{ width: "100%", fontSize: 15, padding: "8px 10px", borderRadius: 6, border: "1px solid #ddd" }} value={row[col.id] || ""} onChange={e => {
-                                                                const table = Array.isArray(values[field.id]) ? values[field.id] : [];
-                                                                table[rowIdx] = { ...table[rowIdx], [col.id]: e.target.value };
-                                                                handleChange(field.id, table);
-                                                            }} />
-                                                        ) : (
-                                                            <select style={{ width: "100%", fontSize: 15, padding: "8px 10px", borderRadius: 6, border: "1px solid #ddd" }} value={row[col.id] || ""} onChange={e => {
-                                                                const table = Array.isArray(values[field.id]) ? values[field.id] : [];
-                                                                table[rowIdx] = { ...table[rowIdx], [col.id]: e.target.value };
-                                                                handleChange(field.id, table);
-                                                            }}>
-                                                                <option value="">Select...</option>
-                                                                {col.options?.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
-                                                            </select>
-                                                        )}
-                                                    </td>
-                                                ))}
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                {field.mode === "dynamic" && (
-                                    <button type="button" style={{ marginTop: 8, padding: "10px 24px", fontSize: 16, borderRadius: 8, border: "1px solid #ddd", background: "#f0f0f0", fontWeight: 600 }} onClick={() => {
-                                        const table = Array.isArray(values[field.id]) ? values[field.id] : [];
-                                        handleChange(field.id, [...table, {}]);
-                                    }}>Add Row</button>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )
-            ))}
-            {!submitted ? (
-                <button type="submit" style={{ marginTop: 24, padding: "12px 32px", fontSize: 18, borderRadius: 8, border: "none", background: "#3b82f6", color: "#fff", fontWeight: 600 }}>Submit</button>
-            ) : null}
-        </form>
+                                            {field.mode === "dynamic" && ((Array.isArray(values[field.id]) ? values[field.id] : [])).map((row: any, rowIdx: number) => (
+                                                <tr key={rowIdx}>
+                                                    <td style={{ fontWeight: 600, padding: "12px 10px", fontSize: 15 }}>{rowIdx + 1}</td>
+                                                    {field.columns.map(col => (
+                                                        <td key={col.id} style={{ padding: "12px 10px" }}>
+                                                            {col.type === "text" ? (
+                                                                <input style={{ width: "100%", fontSize: 15, padding: "8px 10px", borderRadius: 6, border: "1px solid #ddd" }} value={row[col.id] || ""} onChange={e => {
+                                                                    const table = Array.isArray(values[field.id]) ? values[field.id] : [];
+                                                                    table[rowIdx] = { ...table[rowIdx], [col.id]: e.target.value };
+                                                                    handleChange(field.id, table);
+                                                                }} />
+                                                            ) : (
+                                                                <select style={{ width: "100%", fontSize: 15, padding: "8px 10px", borderRadius: 6, border: "1px solid #ddd" }} value={row[col.id] || ""} onChange={e => {
+                                                                    const table = Array.isArray(values[field.id]) ? values[field.id] : [];
+                                                                    table[rowIdx] = { ...table[rowIdx], [col.id]: e.target.value };
+                                                                    handleChange(field.id, table);
+                                                                }}>
+                                                                    <option value="">Select...</option>
+                                                                    {col.options?.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
+                                                                </select>
+                                                            )}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    {field.mode === "dynamic" && (
+                                        <button type="button" style={{ marginTop: 8, padding: "10px 24px", fontSize: 16, borderRadius: 8, border: "1px solid #ddd", background: "#f0f0f0", fontWeight: 600 }} onClick={() => {
+                                            const table = Array.isArray(values[field.id]) ? values[field.id] : [];
+                                            handleChange(field.id, [...table, {}]);
+                                        }}>Add Row</button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )
+                ))}
+                {!submitted ? (
+                    <button type="submit" style={{ marginTop: 24, padding: "12px 32px", fontSize: 18, borderRadius: 8, border: "none", background: "#3b82f6", color: "#fff", fontWeight: 600 }}>Submit</button>
+                ) : null}
+            </form>
+        </div>
     );
 }

@@ -51,7 +51,7 @@ export default function SavedForms({ onEdit, onCreateNew }: {
     }
 
     return (
-        <div
+        <div className="responsive-container"
             style={{
                 maxWidth: 700,
                 margin: "40px auto",
@@ -74,7 +74,7 @@ export default function SavedForms({ onEdit, onCreateNew }: {
                     letterSpacing: 1
                 }}
             >
-                Marketing Form Builder
+                Easy Form Builder
             </h1>
             <button
                 onClick={onCreateNew}

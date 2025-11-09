@@ -217,7 +217,7 @@ export function FormBuilder({ onSave, initialForm }: { onSave: (form: FormSchema
     const jumpTargetIds = getJumpTargetIds();
 
     return (
-        <div style={{ maxWidth: 700, margin: "40px auto", background: "#f8f8fa", borderRadius: 16, boxShadow: "0 4px 24px #0001", padding: 32 }}>
+        <div className="responsive-container" style={{ maxWidth: 700, margin: "40px auto", background: "#f8f8fa", borderRadius: 16, boxShadow: "0 4px 24px #0001", padding: 32 }}>
             <input
                 style={{ fontSize: 24, fontWeight: 600, border: "none", background: "transparent", width: "100%", marginBottom: 24 }}
                 placeholder="Form Title"
@@ -233,7 +233,7 @@ export function FormBuilder({ onSave, initialForm }: { onSave: (form: FormSchema
                 <SortableContext items={fields.map(f => f.id)} strategy={verticalListSortingStrategy}>
                     {fields.map((field) => (
                         <SortableItem key={field.id} id={field.id}>
-                          <div style={{ width: '100%', boxSizing: 'border-box', padding: '12px 12px 12px 8px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12, position: 'relative' }}>
+                          <div className="dnd-box" style={{ width: '100%', boxSizing: 'border-box', padding: '12px 12px 12px 8px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12, position: 'relative' }}>
                             <button onClick={() => removeField(field.id)} style={{ position: 'absolute', top: 8, right: 8, background: '#f8d7da', color: '#c00', border: 'none', borderRadius: 8, padding: '6px 16px', fontWeight: 600, fontSize: 14, zIndex: 2 }}>Delete</button>
                             <div style={{ fontWeight: 700, fontSize: 18, color: '#1a73e8', marginBottom: 4, paddingRight: 90 }}>
                               {field.type.toUpperCase()} <span style={{ color: '#222', fontWeight: 600, fontSize: 16, marginLeft: 8 }}>{field.label}</span>
