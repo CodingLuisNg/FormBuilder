@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { FormSchema } from "./formTypes";
+import { FormSchema } from "../field-types/formTypes";
 
+/**
+ * ResponsesPage component for displaying and managing responses to a specific form.
+ * @param {Object} props - The component props.
+ * @param {string} props.formId - The ID of the form whose responses are being displayed.
+ * @param {Function} props.onReturn - Callback function to return to the previous view.
+ * @returns {JSX.Element} The rendered ResponsesPage component.
+ */
 export default function ResponsesPage({ formId, onReturn }: { formId: string, onReturn: () => void }) {
+    // State to store the list of responses.
     const [responses, setResponses] = useState<any[]>([]);
+    // State to track if data is being loaded.
     const [loading, setLoading] = useState(true);
+    // State to store any error messages.
     const [error, setError] = useState<string | null>(null);
+    // State to store the form schema.
     const [formSchema, setFormSchema] = useState<FormSchema | null>(null);
 
+    // Fetches the form schema and responses when the component mounts or formId changes.
     useEffect(() => {
         async function fetchSchemaAndResponses() {
             setLoading(true);
@@ -28,6 +40,10 @@ export default function ResponsesPage({ formId, onReturn }: { formId: string, on
         void fetchSchemaAndResponses();
     }, [formId]);
 
+    /**
+     * Clears all responses for the current form.
+     * Prompts the user for confirmation before clearing.
+     */
     async function handleClearResponses() {
         if (!window.confirm("Are you sure you want to clear all responses? This cannot be undone.")) return;
         setLoading(true);
@@ -43,6 +59,12 @@ export default function ResponsesPage({ formId, onReturn }: { formId: string, on
         }
     }
 
+    /**
+     * Renders a single response.
+     * @param {Object} resp - The response data.
+     * @param {number} idx - The index of the response.
+     * @returns {JSX.Element|null} The rendered response or null if the form schema is not available.
+     */
     function renderResponse(resp: any, idx: number) {
         if (!formSchema) return null;
         return (
@@ -55,28 +77,28 @@ export default function ResponsesPage({ formId, onReturn }: { formId: string, on
                                 <div style={{ fontWeight: 600 }}>{field.label}</div>
                                 <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 4 }}>
                                     <thead>
-                                        <tr>
-                                            <th style={{}}></th>
-                                            {field.columns.map(col => <th key={col.id} style={{}}>{col.label}</th>)}
-                                        </tr>
+                                    <tr>
+                                        <th style={{}}></th>
+                                        {field.columns.map(col => <th key={col.id} style={{}}>{col.label}</th>)}
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        {field.mode === "static" && (field.rowLabels || []).map((rowLabel, rowIdx) => (
-                                            <tr key={rowIdx}>
-                                                <td style={{ fontWeight: 600 }}>{rowLabel}</td>
-                                                {field.columns.map(col => (
-                                                    <td key={col.id}>{tableData[rowIdx]?.[col.id] || ""}</td>
-                                                ))}
-                                            </tr>
-                                        ))}
-                                        {field.mode === "dynamic" && tableData.map((row: any, rowIdx: number) => (
-                                            <tr key={rowIdx}>
-                                                <td style={{ fontWeight: 600 }}>{rowIdx + 1}</td>
-                                                {field.columns.map(col => (
-                                                    <td key={col.id}>{row[col.id] || ""}</td>
-                                                ))}
-                                            </tr>
-                                        ))}
+                                    {field.mode === "static" && (field.rowLabels || []).map((rowLabel, rowIdx) => (
+                                        <tr key={rowIdx}>
+                                            <td style={{ fontWeight: 600 }}>{rowLabel}</td>
+                                            {field.columns.map(col => (
+                                                <td key={col.id}>{tableData[rowIdx]?.[col.id] || ""}</td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                    {field.mode === "dynamic" && tableData.map((row: any, rowIdx: number) => (
+                                        <tr key={rowIdx}>
+                                            <td style={{ fontWeight: 600 }}>{rowIdx + 1}</td>
+                                            {field.columns.map(col => (
+                                                <td key={col.id}>{row[col.id] || ""}</td>
+                                            ))}
+                                        </tr>
+                                    ))}
                                     </tbody>
                                 </table>
                             </div>

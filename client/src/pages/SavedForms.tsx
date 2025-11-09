@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { FormSchema } from "./formTypes";
+import { FormSchema } from "../field-types/formTypes";
 
+/**
+ * SavedForms component for displaying and managing saved forms.
+ * @param {Object} props - The component props.
+ * @param {Function} props.onEdit - Callback function to edit a selected form.
+ * @param {Function} props.onCreateNew - Callback function to create a new form.
+ * @returns {JSX.Element} The rendered SavedForms component.
+ */
 export default function SavedForms({ onEdit, onCreateNew }: {
     onEdit: (form: FormSchema) => void,
     onCreateNew: () => void
 }) {
+    // State to store the list of saved forms.
     const [forms, setForms] = useState<FormSchema[]>([]);
+    // State to track if data is being loaded.
     const [loading, setLoading] = useState(true);
+    // State to store any error messages.
     const [error, setError] = useState<string | null>(null);
 
+    // Fetches the list of saved forms when the component mounts.
     useEffect(() => {
         async function fetchForms() {
             setLoading(true);
@@ -27,6 +38,11 @@ export default function SavedForms({ onEdit, onCreateNew }: {
         void fetchForms();
     }, []);
 
+    /**
+     * Deletes a form by its ID.
+     * Prompts the user for confirmation before deleting.
+     * @param {string} id - The ID of the form to delete.
+     */
     async function handleDelete(id: string) {
         if (!window.confirm("Are you sure you want to delete this form? This cannot be undone and all responses will be lost.")) return;
         try {
@@ -38,6 +54,11 @@ export default function SavedForms({ onEdit, onCreateNew }: {
         }
     }
 
+    /**
+     * Edits a form by its ID.
+     * Fetches the form data and invokes the onEdit callback.
+     * @param {string} id - The ID of the form to edit.
+     */
     async function handleEdit(id: string) {
         setError(null);
         try {
@@ -52,18 +73,18 @@ export default function SavedForms({ onEdit, onCreateNew }: {
 
     return (
         <div className="responsive-container"
-            style={{
-                maxWidth: 700,
-                margin: "40px auto",
-                background: "#f8f8fa",
-                borderRadius: 16,
-                boxShadow: "0 4px 24px #0001",
-                padding: 32,
-                boxSizing: "border-box",
-                minHeight: "calc(100vh - 80px)",
-                display: "flex",
-                flexDirection: "column"
-            }}
+             style={{
+                 maxWidth: 700,
+                 margin: "40px auto",
+                 background: "#f8f8fa",
+                 borderRadius: 16,
+                 boxShadow: "0 4px 24px #0001",
+                 padding: 32,
+                 boxSizing: "border-box",
+                 minHeight: "calc(100vh - 80px)",
+                 display: "flex",
+                 flexDirection: "column"
+             }}
         >
             <h1
                 style={{

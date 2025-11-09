@@ -1,0 +1,42 @@
+.sortable-card {
+    display: flex;
+    align-items: stretch;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.sortable-card:hover {
+    border-color: #d0d0d0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.sortable-card.dragging {
+    opacity: 0.6;
+    border-style: dashed;
+}
+
+.sortable-handle {
+    width: 38px;
+    min-width: 38px;
+    background: #fafafa;
+    border-right: 1px solid #e2e2e2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    user-select: none;
+}
+
+.sortable-handle:active {
+    cursor: grabbing;
+}
+
+.sortable-content {
+    flex: 1;
+    padding: 16px;
+}

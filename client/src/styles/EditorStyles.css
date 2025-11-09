@@ -1,0 +1,135 @@
+.editor-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editor-type {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    letter-spacing: 0.5px;
+}
+
+.editor-delete {
+    background: #f8d7da;
+    border: none;
+    border-radius: 6px;
+    color: #c00;
+    font-weight: 600;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.editor-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.editor-field-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.editor-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.editor-input {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 14px;
+    background: #fafafa;
+}
+
+.editor-input:focus {
+    outline: none;
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15);
+}
+
+.editor-section {
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.editor-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.editor-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.editor-option-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.editor-select {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 6px 10px;
+    background: #fafafa;
+    font-size: 14px;
+}
+
+.editor-small-button {
+    background: #e3f2fd;
+    border: none;
+    border-radius: 6px;
+    color: #1a73e8;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.editor-small-button.editor-add {
+    margin-top: 6px;
+}
+
+.editor-nested {
+    padding: 12px 14px;
+    background: #f9f9fb;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.editor-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.editor-column-wrap {
+    width: 100%;
+}

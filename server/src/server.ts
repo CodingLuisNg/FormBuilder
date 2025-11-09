@@ -1,70 +1,12 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
-import mysql, { RowDataPacket } from "mysql2/promise";
-import dotenv from "dotenv";
-dotenv.config();
-
-const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
-};
-
-// Ensure tables exist in MySQL
-async function ensureTablesExist() {
-    const conn = await mysql.createConnection(dbConfig);
-    await conn.query(`CREATE TABLE IF NOT EXISTS forms (
-        id VARCHAR(36) PRIMARY KEY,
-        data JSON NOT NULL
-    )`);
-    await conn.query(`CREATE TABLE IF NOT EXISTS responses (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        form_id VARCHAR(36),
-        data JSON NOT NULL
-    )`);
-    await conn.end();
-}
+import {validateResponse} from "./validation";
+import {dbQuery, ensureTablesExist} from "./db";
 
 const app = express();
 app.use(express.json());
 
-const validateResponse = (form: any, data: any) => {
-    const errors: string[] = [];
-    form.fields.forEach((field: any) => {
-        const value = data[field.id];
-        if (!field.label?.trim()) errors.push(`Field label missing for ${field.id}`);
-        if (field.type === "text") {
-            if (field.validation?.required && !value?.trim()) errors.push(`${field.label} is required.`);
-            if (field.validation?.minLength && value?.length < field.validation.minLength) errors.push(`${field.label} must be at least ${field.validation.minLength} characters.`);
-            if (field.validation?.maxLength && value?.length > field.validation.maxLength) errors.push(`${field.label} must be at most ${field.validation.maxLength} characters.`);
-        }
-        if (field.type === "dropdown") {
-            if (field.validation?.required && !value) errors.push(`${field.label} is required.`);
-            if (value && field.options && !field.options.includes(value)) errors.push(`${field.label} value is not valid.`);
-        }
-        if (field.type === "table" && Array.isArray(value)) {
-            value.forEach((row: any) => {
-                field.columns.forEach((col: any) => {
-                    const cell = row[col.id];
-                    if (col.type === "text" && col.validation?.required && !cell?.trim()) errors.push(`${col.label} in ${field.label} is required.`);
-                    if (col.type === "dropdown" && col.validation?.required && !cell) errors.push(`${col.label} in ${field.label} is required.`);
-                    if (cell && col.options && !col.options.includes(cell)) errors.push(`${col.label} in ${field.label} value is not valid.`);
-                });
-            });
-        }
-    });
-    return errors;
-};
-
 const parseFormData = (data: any) => (typeof data === "string" ? JSON.parse(data) : data);
-
-const dbQuery = async (query: string, params: any[] = []) => {
-    const conn = await mysql.createConnection(dbConfig);
-    const [rows] = await conn.query<RowDataPacket[]>(query, params);
-    await conn.end();
-    return rows;
-};
 
 //Forms endpoints
 
