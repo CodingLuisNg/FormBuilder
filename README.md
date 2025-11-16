@@ -1,14 +1,14 @@
-# Marketing Form Builder
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-blue?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-19.2+-61DAFB?logo=react&logoColor=white)
+![Express](https://img.shields.io/badge/Express-3.9+-000000?logo=express&logoColor=white)
+![Node](https://img.shields.io/badge/TsNode-10.9+-339933?logo=tsnode&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
+# Easy Form Builder
+![photo](/resources/home.png)
 
 A full-stack, minimalistic form builder and response management app. Built with React (frontend) and Express/TypeScript (backend), using MySQL for persistent storage.
 
-## Features
-- Drag-and-drop form builder with text, dropdown, and table components
-- Conditional logic for dropdowns (jump to specific questions)
-- Static and dynamic tables
-- Form validation (required, min/max, options, etc.)
-- Save, edit, delete forms
-- Submit and view responses
+---
 
 ## Project Structure
 
@@ -24,6 +24,8 @@ FormBuilder/
 │   ├── package.json
 │   └── tsconfig.json
 ```
+
+---
 
 ## Getting Started
 
@@ -50,7 +52,7 @@ FormBuilder/
 3. **Install dependencies:**
    ```
    cd client && npm install
-   cd ../server && npm install
+   cd server && npm install
    ```
 
 4. **Set up MySQL tables:**
@@ -70,13 +72,40 @@ FormBuilder/
 
 Frontend runs on `http://localhost:3000`, backend on `http://localhost:8080`.
 
-## API Endpoints
-- `POST /api/forms` — Create form
-- `GET /api/forms` — List forms
-- `GET /api/forms/:id` — Get form
-- `PUT /api/forms/:id` — Update form
-- `DELETE /api/forms/:id` — Delete form
-- `POST /api/forms/:id/responses` — Submit response
-- `GET /api/forms/:id/responses` — List responses
-- `DELETE /api/forms/:id/responses` — Delete responses
+---
 
+## Features
+
+### Drag-and-drop form builder with text, dropdown, and table components with validation rules (required, min/max, options)
+
+![photo](/resources/edit.png)
+### Conditional logic for dropdowns (jump to specific questions)
+
+![photo](/resources/dropdown.png)
+### Static and dynamic tables
+
+![photo](/resources/tables.png)
+### Save forms and preview
+
+![photo](/resources/preview.png)
+### Submit and view responses
+
+![photo](/resources/results.png)
+
+---
+
+## Acknowledgements
+
+- My first Typescript project, using project-based learning to pick up this language.
+
+- Built in a focused sprint (< 1 week) to demonstrate full-stack capability.
+
+- Inspired by Google Forms, Typeform and real form builders, will continue to add more special features later.
+
+- learning how to port forward and deploy on github pages next.
+
+---
+
+## Contact
+
+Luis Ng — email.luisng@gmail.com
